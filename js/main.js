@@ -78,7 +78,7 @@ function logout() {
 function popupAddVote() {
     var user = auth.currentUser;
 
-    if (true) {
+    if (user) {
         $("#voteModal").modal("show");
     } else {
         BootstrapDialog.show({
