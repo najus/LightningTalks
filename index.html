@@ -80,25 +80,26 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">1???</h4>
+                    <h4 class="modal-title">Add Lightning Talk</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="frmVoteAdd">
-                        <div class="form-group">
-                            <label for="voteTitle">Talk title</label>
-                            <input type="text" class="form-control" name="voteTitle" id="voteTitle" aria-describedby="titleHelp" placeholder="Title">
-                            <small id="titleHelp" class="form-text text-muted">3?</small>
-                        </div>
-                        <div class="form-group">
-                            <label>3?</label>
-                            <input type="text" class="form-control" name="voteOption1" aria-describedby="optionHelp" placeholder="4?">
-                            <input type="text" class="form-control" name="voteOption2" aria-describedby="optionHelp" placeholder="4?">
-                            <input type="text" class="form-control" name="voteOption3" aria-describedby="optionHelp" placeholder="4?">
-                            <input type="text" class="form-control" name="voteOption4" aria-describedby="optionHelp" placeholder="4?">
-                            <input type="text" class="form-control" name="voteOption5" aria-describedby="optionHelp" placeholder="4?">
-                            <small id="optionHelp" class="form-text text-muted">5?</small>
-                        </div>
-                    </form>
+                  <form id="frmVoteAdd">
+                      <div class="form-group">
+                          <label for="voteTitle">Talk title</label>
+                          <input type="text" class="form-control" name="voteTitle" id="voteTitle" aria-describedby="titleHelp" placeholder="Awesome Lightning Talk">
+                          <!-- <small id="titleHelp" class="form-text text-muted">Title</small> -->
+                      </div>
+                      <div class="form-group">
+                          <label for="desc">Description</label>
+                          <textarea class="form-control" id="desc" name="Description" aria-describedby="descHelp" placeholder="Wow, such lightning, much talk "></textarea>
+                          <!-- <small id="descHelp" class="form-text text-muted">Description</small> -->
+                      </div>
+                      <div class="form-group">
+                          <label>Author</label>
+                          <input type="text" class="form-control" name="Author" aria-describedby="authorHelp" placeholder="Doge">
+                          <!-- <small id="authorHelp" class="form-text text-muted">Author</small> -->
+                      </div>
+                  </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" onclick="addVote()" >Submit</button>

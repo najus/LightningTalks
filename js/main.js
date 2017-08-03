@@ -99,11 +99,7 @@ function addVote() {
     voteObject["date"] = firebase.database.ServerValue.TIMESTAMP;
     voteObject["user"] = auth.currentUser.uid;
     voteObject["count"] = {
-        "count1": 0,
-        "count2": 0,
-        "count3": 0,
-        "count4": 0,
-        "count5": 0,
+        "count": 0,
         "user": {}
     }
     var key = db.ref().child('votes').push().key;
