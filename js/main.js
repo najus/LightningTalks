@@ -25,7 +25,7 @@ auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
     var options = {
-        pageSize: 2,
+        pageSize: 5,
         finite: true
     };
     var ref = db.ref("votes");
