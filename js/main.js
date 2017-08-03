@@ -164,10 +164,10 @@ function vote(btn, index) {
     if(auth.currentUser == null) {
         BootstrapDialog.show({
             type: BootstrapDialog.TYPE_DANGER,
-            title: '안내',
-            message: '로그인 후 이용해주세요.',
+            title: 'Error',
+            message: 'Try logging in',
             buttons: [{
-                label: '구글 로그인',
+                label: 'Close',
                 action: login
             }]
         });
@@ -223,10 +223,10 @@ function deleteVote(btn) {
         if (error) {
             BootstrapDialog.show({
                 type: BootstrapDialog.TYPE_DANGER,
-                title: '오류',
-                message: '알수없는 문제가 발생하였습니다.',
+                title: 'Error',
+                message: 'Unkown problem.',
                 buttons: [{
-                    label: '닫기',
+                    label: 'Close',
                     action: function(dialog){dialog.close();}
                 }]
             });
