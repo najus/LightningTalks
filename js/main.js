@@ -98,6 +98,7 @@ function addVote() {
     var voteObject = $("#frmVoteAdd").serializeObject();
     voteObject["date"] = firebase.database.ServerValue.TIMESTAMP;
     voteObject["user"] = auth.currentUser.uid;
+    voteObject["email"] = auth.currentUser.email;
     voteObject["count"] = {
         "count": 0,
         "user": {}
