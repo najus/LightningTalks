@@ -32,7 +32,7 @@ $(document).on("ready", function(){
           var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
           var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
           var pCard = $("<p></p>", {"class":"card-text"}).text(talks[key].desc);
-          var cardBtn = $("<a></a>", {"class":"btn btn-primary", "onClick":"vote("+this+", "+key+")"}).text("Vote");
+          var cardBtn = $("<a></a>", {"id": key, "class":"btn btn-primary", "onClick":"vote(\""+key+"\")"}).text("Vote");
 
           topCard.append(blockCard);
           blockCard.append(h4Card, h5Card, pCard, cardBtn);
@@ -151,58 +151,78 @@ function renderVoteItem(key, value) {
     return voteHtml;
 }
 
-function vote(btn, index) {
-    if(auth.currentUser == null) {
-        BootstrapDialog.show({
-            type: BootstrapDialog.TYPE_DANGER,
-            title: 'Error',
-            message: 'Try logging in',
-            buttons: [{
-                label: 'Close',
-                action: login
-            }]
-        });
-        return false;
-    }
+function vote(key) {
+  // if(auth.currentUser == null) {
+  //         BootstrapDialog.show({
+  //             type: BootstrapDialog.TYPE_DANGER,
+  //             title: 'Error',
+  //             message: 'Try logging in',
+  //             buttons: [{
+  //                 label: 'Close',
+  //                 action: login
+  //             }]
+  //         });
+  //         return false;
+  //     }
+  var countRef = db.ref("/votes/" + key);
+  countRef.once('value').then(function(snapshot) {
+  	countRef.update({ count: snapshot.val().count+1});
+  });
 
-    var key = $(btn).data("key");
-    console.log(key + ", " + index);
-    var countRef = db.ref("/votes/" + key + "/count");
-    var uid = auth.currentUser.uid;
-
-    countRef.transaction(function(post) {
-        if (!post)
-            post = {};
-        if (!post.user) {
-            post.user = {};
-        }
-
-        if(post.user[uid] && post.user[uid] == index) {
-            post["count" + post.user[uid]]--;
-            post.user[uid] = null;
-            return post;
-        }
-
-        if(!post["count" + index])
-            post["count" + index] = 0;
-
-        if (post.user[uid]) {
-            post["count" + post.user[uid]]--;
-        }
-
-        post["count" + index]++;
-        post.user[uid] = index;
-
-        return post;
-    }, function(){
-        var value = db.ref("/votes/" + key);
-        value.once('value', function(snapshot){
-            $(btn).parents(".vote-item").replaceWith(
-                $(renderVoteItem(key, snapshot.val())));
-        });
-    });
-    return true;
 }
+
+// function vote(btn, index) {
+//     if(auth.currentUser == null) {
+//         BootstrapDialog.show({
+//             type: BootstrapDialog.TYPE_DANGER,
+//             title: 'Error',
+//             message: 'Try logging in',
+//             buttons: [{
+//                 label: 'Close',
+//                 action: login
+//             }]
+//         });
+//         return false;
+//     }
+//
+//     var key = $(btn).data("key");
+//     console.log(key + ", " + index);
+//     var countRef = db.ref("/votes/" + key + "/count");
+//     var uid = auth.currentUser.uid;
+//
+//     countRef.transaction(function(post) {
+//         if (!post)
+//             post = {};
+//         if (!post.user) {
+//             post.user = {};
+//         }
+//
+//         if(post.user[uid] && post.user[uid] == index) {
+//             post["count" + post.user[uid]]--;
+//             post.user[uid] = null;
+//             return post;
+//         }
+//
+//         if(!post["count" + index])
+//             post["count" + index] = 0;
+//
+//         if (post.user[uid]) {
+//             post["count" + post.user[uid]]--;
+//         }
+//
+//         post["count" + index]++;
+//         post.user[uid] = index;
+//
+//         return post;
+//     }, function(){
+//         var value = db.ref("/votes/" + key);
+//         value.once('value', function(snapshot){
+//             $(btn).parents(".vote-item").replaceWith(
+//                 $(renderVoteItem(key, snapshot.val())));
+//         });
+//     });
+//     return true;
+// }
 
 function deleteVote(btn) {
     var key = $(btn).data("key");
