@@ -29,7 +29,7 @@ $(document).on("ready", function(){
         for (var key in talks) {
           var topCard = $("<div></div>", {"class":"card"});
           var blockCard = $("<div></div>", {"class":"card-block"});
-          var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
+          var h4Card = $("<h4></h4>", {"id":"h4"+key, "class":"card-title"}).text(talks[key].voteTitle + " - vote: ");
           var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
           var pCard = $("<p></p>", {"class":"card-text"}).text(talks[key].desc);
           var cardBtn = $("<a></a>", {"id": key, "class":"btn btn-primary", "onClick":"vote(\""+key+"\")"}).text("Vote");
@@ -38,9 +38,16 @@ $(document).on("ready", function(){
           blockCard.append(h4Card, h5Card, pCard, cardBtn);
 
           $("#vote-container").append(topCard);
+          getCount(key);
         }
 		});
 });
+
+function getCount(key){
+  db.ref("/votes/" + key + "/count").once('value').then(function(result){
+    $("#h4"+key).append(result.val());
+  });
+}
 
 function login(){
 	var provider = new firebase.auth.GoogleAuthProvider();
@@ -152,18 +159,18 @@ function renderVoteItem(key, value) {
 }
 
 function vote(key) {
-  // if(auth.currentUser == null) {
-  //         BootstrapDialog.show({
-  //             type: BootstrapDialog.TYPE_DANGER,
-  //             title: 'Error',
-  //             message: 'Try logging in',
-  //             buttons: [{
-  //                 label: 'Close',
-  //                 action: login
-  //             }]
-  //         });
-  //         return false;
-  //     }
+  if(auth.currentUser == null) {
+          BootstrapDialog.show({
+              type: BootstrapDialog.TYPE_DANGER,
+              title: 'Error',
+              message: 'Try logging in',
+              buttons: [{
+                  label: 'Close',
+                  action: login
+              }]
+          });
+          return false;
+      }
   var countRef = db.ref("/votes/" + key);
   countRef.once('value').then(function(snapshot) {
   	countRef.update({ count: snapshot.val().count+1});
