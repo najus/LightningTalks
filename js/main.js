@@ -32,7 +32,7 @@ $(document).on("ready", function(){
           var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
           var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
           var pCard = $("<p></p>", {"class":"card-text"}).text(talks[key].desc);
-          var cardBtn = $("<a></a>", {"class":"btn btn-primary"}).text("Vote");
+          var cardBtn = $("<a></a>", {"class":"btn btn-primary", "onClick":"vote("+this+", "+key+")"}).text("Vote");
 
           topCard.append(blockCard);
           blockCard.append(h4Card, h5Card, pCard, cardBtn);
