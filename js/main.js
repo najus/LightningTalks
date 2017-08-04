@@ -45,7 +45,7 @@ $(document).on("ready", function(){
 });
 
 function getCount(key){
-  db.ref("/votes/" + key + "/count").once('value').then(function(result){
+  db.ref("/votes/" + key).once('value').then(function(result){
 	  
     $("#h4"+key).text(" - vote: " + result.val().count);
   });
