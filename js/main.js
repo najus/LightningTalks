@@ -32,7 +32,7 @@ $(document).on("ready", function(){
         if(talkData.key == data.val().talk){
           $("#votedFor").text("You've voted for: "+ talkData.val().author);
           var unvoteBtn = $("<a></a>", {"id": "unvote-"+talkData.key, "class": "btn btn-primary btn-danger", "onClick":"unvote(\""+talkData.key+"\")"}).text("Unvote");
-          $("#votedFor").append("      " + unvoteBtn);
+          $("#votedFor").append(unvoteBtn);
         }
       });
     }
