@@ -28,7 +28,7 @@ $(document).on("ready", function(){
   var playersRef = firebase.database().ref("votedUsers/");
   playersRef.orderByChild("voter").on("child_added", function(data) {
     console.log(data.val().voter);
-    if(data.val().voter == "auth.currentUser.uid"){
+    if(data.val().voter == auth.currentUser.uid){
       var playersRef = firebase.database().ref("votes/");
       playersRef.orderByKey().on("child_added", function(talkData) {
         if(talkData.key == data.val().talk){
@@ -72,7 +72,7 @@ function isAlreadyVoted(key){
   votedUsers.once('value', function(snapshot){
     snapshot.forEach(function(childSnapshot) {
       var childData = childSnapshot.val();
-      if(childData["voter"] == "auth.currentUser.uid"){
+      if(childData["voter"] == auth.currentUser.uid){
         $("#"+key).addClass("disabled");
       }
     });
@@ -197,7 +197,7 @@ function vote(key) {
       title: 'Error',
       message: 'Try logging in',
       buttons: [{
-        label: 'Close',
+        label: 'Login',
         action: login
       }]
     });
@@ -205,13 +205,26 @@ function vote(key) {
   }
 
   incrementVoteCount(key);
-  addVotedUser(key, "auth.currentUser.uid");
+  addVotedUser(key, auth.currentUser.uid);
   getCount(key);
 }
 
 function unvote(key){
+  if(auth.currentUser == null) {
+    BootstrapDialog.show({
+      type: BootstrapDialog.TYPE_DANGER,
+      title: 'Error',
+      message: 'Try logging in',
+      buttons: [{
+        label: 'Close',
+        action: login
+      }]
+    });
+    return false;
+  }
+
   decrementVoteCount(key);
-  removeVotedUser(key, "auth.currentUser.uid");
+  removeVotedUser(key, auth.currentUser.uid);
   getCount(key);
 }
 
