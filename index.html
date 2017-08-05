@@ -38,6 +38,9 @@
           <a class="navbar-brand" href="#">ICC Lightning Talks</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+          <div class="navbar-form navbar-left">
+            <button id="result-btn" type="button" onclick="result();" class="btn btn-success">Result</button>
+          </div>
             <div class="navbar-form navbar-right">
                 <button id="login-btn" type="button" onclick="login();" class="btn btn-success" style="display: none;">Login</button>
                 <button id="logout-btn" type="button" onclick="logout();" class="btn btn-fail" style="display: none;">Logout</button>
@@ -50,10 +53,12 @@
     <div class="jumbotron">
       <div class="container">
         <h3>Welcome!</h3>
-        <p>Add a lightning talk</p>
-        <p>
-            <button type="button" class="btn btn-primary btn-info btn-lg" onclick="popupAddVote()">Create</button>
-        </p>
+        <div id="add-talk" class="hidden">
+          <p>Add a lightning talk</p>
+            <p>
+                <button type="button" class="btn btn-primary btn-info btn-lg" onclick="popupAddVote()">Create</button>
+            </p>
+        </div>
         <p id = "votedFor">
         </p>
       </div>
@@ -108,6 +113,27 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" onclick="addVote()" >Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="resultModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Result</h4>
+                </div>
+                <div class="modal-body">
+                  <form id="result-body">
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
 

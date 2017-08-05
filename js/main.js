@@ -24,22 +24,24 @@ var authCheck = function(user) {
 auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
-
   var playersRef = firebase.database().ref("votedUsers/");
   playersRef.orderByChild("voter").on("child_added", function(data) {
-    console.log(data.val().voter);
     if(data.val().voter == auth.currentUser.uid){
       var playersRef = firebase.database().ref("votes/");
       playersRef.orderByKey().on("child_added", function(talkData) {
         if(talkData.key == data.val().talk){
           $("#votedFor").text("You've voted for: "+ talkData.val().author);
           var unvoteBtn = $("<a></a>", {"id": "unvote-"+talkData.key, "class": "btn btn-primary btn-danger", "onClick":"unvote(\""+talkData.key+"\")"}).text("Unvote");
-          $("#votedFor").append(unvoteBtn);
+          $("#votedFor").append("      " + unvoteBtn);
         }
       });
     }
   });
-
+  firebase.database().ref('/admin/').once('value').then(function(snapshot) {
+    if(auth.currentUser != null && auth.currentUser.uid == snapshot.val()){
+      $("#add-talk").removeClass("hidden");
+    }
+  });
   firebase.database().ref('/votes/').once('value').then(function(snapshot) {
     var talks = snapshot.val();
     for (var key in talks) {
@@ -124,6 +126,18 @@ function popupAddVote() {
     });
 
   }
+}
+
+function result(){
+  var voteRef = firebase.database().ref("votes/");
+
+  voteRef.orderByChild("count").limitToLast(1).on("value", function(data) {
+     data.forEach(function(data) {
+        var output = "Winner is: " + data.val().author + " for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+        $("#result-body").text(output);
+     });
+  });
+  $("#resultModal").modal("show");
 }
 
 function addVote() {
@@ -271,7 +285,6 @@ function removeVotedUser(key, val){
 
   var votedUsers = db.ref("votedUsers");
   votedUsers.once('value', function(snapshot){
-    console.log(snapshot.val);
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
       var childData = childSnapshot.val();
