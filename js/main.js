@@ -26,16 +26,7 @@ auth.onAuthStateChanged(authCheck);
 $(document).on("ready", function(){
   firebase.database().ref('/votes/').once('value').then(function(snapshot) {
     var alreadyVoted = false;
-    var votedUsers = db.ref("votedUsers");
-    votedUsers.once('value', function(snapshot){
-      snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val();
-        if(auth.currentUser !=null && childData == auth.currentUser.uid){
-          alreadyVoted = true;
-          return;
-        }
-      });
-    });
+
 
     var talks = snapshot.val();
     for (var key in talks) {
@@ -49,7 +40,7 @@ $(document).on("ready", function(){
       if(alreadyVoted){
         disabledClassValue = "disabled";
       }
-      var cardBtn = $("<a></a>", {"id": key, "class":"btn btn-primary " + disabledClassValue, "onClick":"vote(\""+key+"\")"}).text("Vote");
+      var cardBtn = $("<a></a>", {"id": key, "class":"btn btn-primary ", "onClick":"vote(\""+key+"\")"}).text("Vote");
 
       topCard.append(blockCard);
       blockCard.append(h4Card, pTemp, h5Card, pCard, cardBtn);
@@ -64,6 +55,19 @@ function getCount(key){
   db.ref("/votes/" + key).once('value').then(function(result){
 
     $("#h4"+key).text(" - vote: " + result.val().count);
+  });
+}
+
+function isAlreadyVoted(){
+  var votedUsers = db.ref("votedUsers");
+  votedUsers.once('value', function(snapshot){
+    snapshot.forEach(function(childSnapshot) {
+      var childData = childSnapshot.val();
+      if(auth.currentUser !=null && childData == auth.currentUser.uid){
+        alreadyVoted = true;
+        return;
+      }
+    });
   });
 }
 
@@ -193,11 +197,11 @@ function vote(key) {
   }
 
   incrementVoteCount(key);
-  addVotedUser(key, auth.currentUser.uid);
+  addVotedUser(key, "auth.currentUser.uid");
   getCount(key);
 
   decrementVoteCount(key);
-  // removeVotedUser(key, "testUser");
+  removeVotedUser(key, "auth.currentUser.uid");
   getCount(key);
 }
 
@@ -218,7 +222,7 @@ function decrementVoteCount(key){
 function addVotedUser(key, val) {
   var voteRef = db.ref("votes").child(key).child("voters");
   var votedUsers = db.ref("votedUsers").push();
-  votedUsers.set(val);
+  votedUsers.set({voter:val, talk:key});
 
   var voteUpdateRed = voteRef.push();
   voteUpdateRed.set(val, function(error) {
@@ -244,11 +248,12 @@ function removeVotedUser(key, val){
 
   var votedUsers = db.ref("votedUsers");
   votedUsers.once('value', function(snapshot){
+    console.log(snapshot.val);
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
       var childData = childSnapshot.val();
-      if(childData == val){
-        voteRef.child(childKey).remove();
+      if(childData["voter"] == val){
+        votedUsers.child(childKey).remove();
       }
     });
   });
