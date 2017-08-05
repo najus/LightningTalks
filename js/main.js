@@ -25,21 +25,22 @@ auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
 
-  var playersRef = firebase.database().ref("votedUsers/");
-  playersRef.orderByChild("voter").on("child_added", function(data) {
-    console.log(data.val().voter);
-    if(data.val().voter == auth.currentUser.uid){
-      var playersRef = firebase.database().ref("votes/");
-      playersRef.orderByKey().on("child_added", function(talkData) {
-        if(talkData.key == data.val().talk){
-          $("#votedFor").text("You've voted for: "+ talkData.val().author);
-          var unvoteBtn = $("<a></a>", {"id": "unvote-"+talkData.key, "class": "btn btn-primary btn-danger", "onClick":"unvote(\""+talkData.key+"\")"}).text("Unvote");
-          $("#votedFor").append(unvoteBtn);
-        }
-      });
-    }
-  });
-
+  if(auth.currentUser){
+    var playersRef = firebase.database().ref("votedUsers/");
+    playersRef.orderByChild("voter").on("child_added", function(data) {
+      console.log(data.val().voter);
+      if(data.val().voter == auth.currentUser.uid){
+        var playersRef = firebase.database().ref("votes/");
+        playersRef.orderByKey().on("child_added", function(talkData) {
+          if(talkData.key == data.val().talk){
+            $("#votedFor").text("You've voted for: "+ talkData.val().author);
+            var unvoteBtn = $("<a></a>", {"id": "unvote-"+talkData.key, "class": "btn btn-primary btn-danger", "onClick":"unvote(\""+talkData.key+"\")"}).text("Unvote");
+            $("#votedFor").append(unvoteBtn);
+          }
+        });
+      }
+    });
+  }
   firebase.database().ref('/votes/').once('value').then(function(snapshot) {
     var talks = snapshot.val();
     for (var key in talks) {
@@ -72,7 +73,7 @@ function isAlreadyVoted(key){
   votedUsers.once('value', function(snapshot){
     snapshot.forEach(function(childSnapshot) {
       var childData = childSnapshot.val();
-      if(childData["voter"] == auth.currentUser.uid){
+      if(auth.currentUser != null && childData["voter"] == auth.currentUser.uid){
         $("#"+key).addClass("disabled");
       }
     });
