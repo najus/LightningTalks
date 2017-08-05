@@ -24,8 +24,8 @@ var authCheck = function(user) {
 auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
-  var playersRef = firebase.database().ref("votedUsers/");
-  playersRef.orderByChild("voter").on("child_added", function(data) {
+  var votedUsersRef = firebase.database().ref("votedUsers/");
+  votedUsersRef.orderByChild("voter").on("child_added", function(data) {
     if(data.val().voter == auth.currentUser.uid){
       var playersRef = firebase.database().ref("votes/");
       playersRef.orderByKey().on("child_added", function(talkData) {
@@ -45,8 +45,8 @@ $(document).on("ready", function(){
   firebase.database().ref('/votes/').once('value').then(function(snapshot) {
     var talks = snapshot.val();
     for (var key in talks) {
-      var topCard = $("<div></div>", {"class":"card"});
-      var blockCard = $("<div></div>", {"class":"card-block"});
+      var topCard = $("<div></div>", {"class":"card", "style":"border: 1px solid; margin:15px; border-color: #080808;"});
+      var blockCard = $("<div></div>", {"class":"card-block", "style":"padding: 19px;"});
       var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
       var pTemp = $("<p></p>", {"id":"h4"+key});
       var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
