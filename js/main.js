@@ -24,28 +24,38 @@ var authCheck = function(user) {
 auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
+
+  var playersRef = firebase.database().ref("votedUsers/");
+  playersRef.orderByChild("voter").on("child_added", function(data) {
+    console.log(data.val().voter);
+    if(data.val().voter == "auth.currentUser.uid"){
+      var playersRef = firebase.database().ref("votes/");
+      playersRef.orderByKey().on("child_added", function(talkData) {
+        if(talkData.key == data.val().talk){
+          $("#votedFor").text("You've voted for: "+ talkData.val().author);
+          var unvoteBtn = $("<a></a>", {"id": "unvote-"+talkData.key, "class": "btn btn-primary btn-danger", "onClick":"unvote(\""+talkData.key+"\")"}).text("Unvote");
+          $("#votedFor").append(unvoteBtn);
+        }
+      });
+    }
+  });
+
   firebase.database().ref('/votes/').once('value').then(function(snapshot) {
-    var alreadyVoted = false;
-
-
     var talks = snapshot.val();
     for (var key in talks) {
-      var disabledClassValue= "";
       var topCard = $("<div></div>", {"class":"card"});
       var blockCard = $("<div></div>", {"class":"card-block"});
       var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
       var pTemp = $("<p></p>", {"id":"h4"+key});
       var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
       var pCard = $("<p></p>", {"class":"card-text"}).text(talks[key].desc);
-      if(alreadyVoted){
-        disabledClassValue = "disabled";
-      }
-      var cardBtn = $("<a></a>", {"id": key, "class":"btn btn-primary ", "onClick":"vote(\""+key+"\")"}).text("Vote");
+      var disabledClassValue= "btn btn-primary";
+      var cardBtn = $("<a></a>", {"id": key, "class": "btn btn-primary", "onClick":"vote(\""+key+"\")"}).text("Vote");
 
       topCard.append(blockCard);
       blockCard.append(h4Card, pTemp, h5Card, pCard, cardBtn);
-
       $("#vote-container").append(topCard);
+      isAlreadyVoted(key);
       getCount(key);
     }
   });
@@ -53,19 +63,17 @@ $(document).on("ready", function(){
 
 function getCount(key){
   db.ref("/votes/" + key).once('value').then(function(result){
-
     $("#h4"+key).text(" - vote: " + result.val().count);
   });
 }
 
-function isAlreadyVoted(){
+function isAlreadyVoted(key){
   var votedUsers = db.ref("votedUsers");
   votedUsers.once('value', function(snapshot){
     snapshot.forEach(function(childSnapshot) {
       var childData = childSnapshot.val();
-      if(auth.currentUser !=null && childData == auth.currentUser.uid){
-        alreadyVoted = true;
-        return;
+      if(childData["voter"] == "auth.currentUser.uid"){
+        $("#"+key).addClass("disabled");
       }
     });
   });
@@ -199,7 +207,9 @@ function vote(key) {
   incrementVoteCount(key);
   addVotedUser(key, "auth.currentUser.uid");
   getCount(key);
+}
 
+function unvote(key){
   decrementVoteCount(key);
   removeVotedUser(key, "auth.currentUser.uid");
   getCount(key);
@@ -267,7 +277,7 @@ function removeVotedUser(key, val){
       }
     });
   });
-
+  document.location.reload();
 }
 
 function deleteVote(btn) {
