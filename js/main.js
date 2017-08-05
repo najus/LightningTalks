@@ -193,7 +193,7 @@ function vote(key) {
   }
 
   incrementVoteCount(key);
-  addVotedUser(key, "testUser");
+  addVotedUser(key, auth.currentUser.uid);
   getCount(key);
 
   decrementVoteCount(key);
