@@ -92,7 +92,6 @@ function login(){
     var user = result.user;
     console.log(token);
     console.log(user);
-    window.locatin.reload();
   }).catch(function(error) {
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -100,6 +99,7 @@ function login(){
     var credential = error.credential;
     console.log(error);
   });
+  window.locatin.reload();
 }
 
 
