@@ -100,6 +100,7 @@ function login(){
     var credential = error.credential;
     console.log(error);
   });
+  window.locatin.reload();
 }
 
 
