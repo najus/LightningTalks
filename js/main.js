@@ -19,7 +19,6 @@ var authCheck = function(user) {
     $("#login-btn").show();
     $("#logout-btn").hide();
   }
-  location.reload();
 };
 
 auth.onAuthStateChanged(authCheck);
@@ -93,6 +92,7 @@ function login(){
     var user = result.user;
     console.log(token);
     console.log(user);
+    window.locatin.reload();
   }).catch(function(error) {
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -106,6 +106,7 @@ function login(){
 function logout() {
   auth.signOut().then(function() {
     console.log('Signed Out');
+    window.location.reload();
   }, function(error) {
     console.error('Sign Out Error', error);
   });
