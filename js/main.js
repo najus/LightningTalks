@@ -136,10 +136,10 @@ function result(){
   var voteRef = firebase.database().ref("votes/");
 
   voteRef.orderByChild("count").limitToLast(1).on("value", function(data) {
-     data.forEach(function(data) {
-        var output = "Winner is: " + data.val().author + " for " + data.val().voteTitle+ " with " + data.val().count + " votes";
-        $("#result-body").text(output);
-     });
+    data.forEach(function(data) {
+      var output = "Winner is: " + data.val().author + " for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+      $("#result-body").text(output);
+    });
   });
   $("#resultModal").modal("show");
 }
@@ -177,35 +177,6 @@ return db.ref().update(updates, function(error) {
     document.location.reload();
   }
 });
-}
-
-function addPage(keys) {
-  var voteContainer = $("#vote-container");
-
-  $.each(keys, function(index) {
-    var voteHtml = renderVoteItem(keys[index], votePaginator.collection[keys[index]]);
-    voteContainer.append(voteHtml);
-  });
-}
-
-function renderVoteItem(key, value) {
-  var source = $("#vote-item").html();
-  var template = Handlebars.compile(source);
-
-  value["key"] = key;
-  if(auth.currentUser && auth.currentUser.uid == value.user) {
-    value["mine"] = true;
-  }
-  var voteHtml = $(template(value));
-  if(value.count.user && auth.currentUser) {
-    var index = value.count.user[auth.currentUser.uid];
-    if(index)
-    voteHtml.find("a").eq(index - 1).addClass("btn-info");
-
-  }
-
-
-  return voteHtml;
 }
 
 function vote(key) {
@@ -308,31 +279,4 @@ function removeVotedUser(key, val){
     });
   });
   document.location.reload();
-}
-
-function deleteVote(btn) {
-  var key = $(btn).data("key");
-  var updates = {};
-  updates['/votes/' + key] = null;
-  updates['/user-votes/' + auth.currentUser.uid + '/' + key] = null;
-
-  db.ref().update(updates, function(error) {
-    if (error) {
-      BootstrapDialog.show({
-        type: BootstrapDialog.TYPE_DANGER,
-        title: 'Error',
-        message: 'Unkown problem.',
-        buttons: [{
-          label: 'Close',
-          action: function(dialog){dialog.close();}
-        }]
-      });
-    } else {
-      document.location.reload();
-    }
-  });
-}
-
-function nextPage() {
-  votePaginator.goToPage(votePaginator.pageNumber + 1);
 }
