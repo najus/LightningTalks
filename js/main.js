@@ -19,6 +19,7 @@ var authCheck = function(user) {
     $("#login-btn").show();
     $("#logout-btn").hide();
   }
+  location.reload();
 };
 
 auth.onAuthStateChanged(authCheck);
