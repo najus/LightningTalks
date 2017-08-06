@@ -92,7 +92,7 @@ function login(){
     var user = result.user;
     console.log(token);
     console.log(user);
-    window.locatin.reload();
+    window.location.reload();
   }).catch(function(error) {
     var errorCode = error.code;
     var errorMessage = error.message;
