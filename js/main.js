@@ -75,7 +75,7 @@ function getCount(key){
   });
 }
 
-getLoggedInUser(){
+function getLoggedInUser(){
   $("#signedin").text(auth.currentUser.email);
 }
 
