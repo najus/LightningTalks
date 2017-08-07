@@ -25,7 +25,6 @@ auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
   var votedUsersRef = firebase.database().ref("votedUsers/");
-  getLoggedInUser();
   votedUsersRef.orderByChild("voter").on("child_added", function(data) {
     if(data.val().voter == auth.currentUser.uid){
       var playersRef = firebase.database().ref("votes/");
@@ -146,7 +145,7 @@ function showVotingTime(){
       window.voting = "closed";
     }
   });
-
+  getLoggedInUser();
 }
 
 function popupAddVote() {
