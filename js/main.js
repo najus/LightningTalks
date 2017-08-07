@@ -66,6 +66,9 @@ $(document).on("ready", function(){
       getCount(key);
     }
   });
+  if(auth.currentUser){
+    $("#signedin").text(auth.currentUser.email);
+  }
 });
 
 function getCount(key){
