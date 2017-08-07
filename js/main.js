@@ -66,15 +66,17 @@ $(document).on("ready", function(){
       getCount(key);
     }
   });
-  if(auth.currentUser){
-    $("#signedin").text(auth.currentUser.email);
-  }
+  getLoggedInUser();
 });
 
 function getCount(key){
   db.ref("/votes/" + key).once('value').then(function(result){
     $("#h4"+key).text(" - vote: " + result.val().count);
   });
+}
+
+getLoggedInUser(){
+  $("#signedin").text(auth.currentUser.email);
 }
 
 function isAlreadyVoted(key){
