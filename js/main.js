@@ -15,6 +15,7 @@ var authCheck = function(user) {
   if(user) {
     $("#login-btn").hide();
     $("#logout-btn").show();
+    getLoggedInUser();
   } else {
     $("#login-btn").show();
     $("#logout-btn").hide();
@@ -145,7 +146,6 @@ function showVotingTime(){
       window.voting = "closed";
     }
   });
-  getLoggedInUser();
 }
 
 function popupAddVote() {
