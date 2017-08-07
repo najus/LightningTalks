@@ -25,6 +25,7 @@ auth.onAuthStateChanged(authCheck);
 
 $(document).on("ready", function(){
   var votedUsersRef = firebase.database().ref("votedUsers/");
+  getLoggedInUser();
   votedUsersRef.orderByChild("voter").on("child_added", function(data) {
     if(data.val().voter == auth.currentUser.uid){
       var playersRef = firebase.database().ref("votes/");
@@ -66,7 +67,7 @@ $(document).on("ready", function(){
       getCount(key);
     }
   });
-  getLoggedInUser();
+
 });
 
 function getCount(key){
@@ -76,7 +77,9 @@ function getCount(key){
 }
 
 function getLoggedInUser(){
-  $("#signedin").text(auth.currentUser.email);
+  if(auth.currentUser){
+    $("#signedin").text(auth.currentUser.email);
+  }
 }
 
 function isAlreadyVoted(key){
