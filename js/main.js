@@ -38,6 +38,8 @@ $(document).on("ready", function(){
       });
     }
   });
+
+  showVotingTime();
   firebase.database().ref('/admin/').once('value').then(function(snapshot) {
     if(auth.currentUser != null && auth.currentUser.uid == snapshot.val()){
       $("#add-talk").removeClass("hidden");
@@ -52,12 +54,14 @@ $(document).on("ready", function(){
       var pTemp = $("<p></p>", {"id":"h4"+key});
       var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
       var pCard = $("<p></p>", {"class":"card-text"}).text(talks[key].desc);
-      var disabledClassValue= "btn btn-primary";
       var cardBtn = $("<a></a>", {"id": key, "class": "btn btn-primary", "onClick":"vote(\""+key+"\")"}).text("Vote");
 
       topCard.append(blockCard);
       blockCard.append(h4Card, pTemp, h5Card, pCard, cardBtn);
       $("#vote-container").append(topCard);
+      if(window.voting==="closed"){
+        disableVotingButton(key);
+      }
       isAlreadyVoted(key);
       getCount(key);
     }
@@ -76,10 +80,14 @@ function isAlreadyVoted(key){
     snapshot.forEach(function(childSnapshot) {
       var childData = childSnapshot.val();
       if(auth.currentUser != null && childData["voter"] == auth.currentUser.uid){
-        $("#"+key).addClass("disabled");
+        disableVotingButton(key);
       }
     });
   });
+}
+
+function disableVotingButton(key){
+  $("#"+key).addClass("disabled");
 }
 
 function login(){
@@ -111,6 +119,26 @@ function logout() {
   }, function(error) {
     console.error('Sign Out Error', error);
   });
+}
+
+function showVotingTime(){
+  firebase.database().ref('/deadline/').once('value').then(function(snapshot) {
+    var deadline = snapshot.val();
+    var dateParts = deadline.match(/(\d+)-(\d+)-(\d+) (\d+):(\d+)/);
+    var day = dateParts[1];
+    var month = dateParts[2] - 1;
+    var year = dateParts[3];
+    var hours = dateParts[4];
+    var minutes = dateParts[5];
+    var date = new Date(year, month, day, hours, minutes);
+    if(date > Date.now()){
+      $("#voting-time").text("Voting is open until: " + hours + ":" + minutes + ", " + date.toDateString());
+    }else{
+      $("#voting-time").text("Voting is closed for this time.");
+      window.voting = "closed";
+    }
+  });
+
 }
 
 function popupAddVote() {
@@ -180,7 +208,7 @@ return db.ref().update(updates, function(error) {
 }
 
 function vote(key) {
-  if(auth.currentUser == null) {
+  if(auth.currentUser == null ) {
     BootstrapDialog.show({
       type: BootstrapDialog.TYPE_DANGER,
       title: 'Error',
