@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <title>ICC Lightning Talks</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -53,12 +53,12 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron vertical-center">
       <div class="container text-center">
-        <h3>Welcome!</h3>
+        <h3>Welcome! Vote for your favorite talk.</h3>
         <h4 id="voting-time"></h4>
         <div id="add-talk" class="hidden">
           <p>Add a lightning talk</p>
             <p>
-                <button type="button" class="btn btn-primary btn-info btn-lg" onclick="popupAddVote()">Create</button>
+                <button type="button" class="btn btn-primary btn-info btn-lg" onclick="popupAddVote()">Add</button>
             </p>
         </div>
         <p id = "votedFor">
@@ -98,17 +98,14 @@
                       <div class="form-group">
                           <label for="voteTitle">Talk title</label>
                           <input type="text" class="form-control" name="voteTitle" id="voteTitle" aria-describedby="titleHelp" placeholder="Awesome Lightning Talk">
-                          <!-- <small id="titleHelp" class="form-text text-muted">Title</small> -->
                       </div>
                       <div class="form-group">
                           <label for="desc">Description</label>
                           <textarea class="form-control" id="desc" name="desc" aria-describedby="descHelp" placeholder="Wow, such lightning, much talk "></textarea>
-                          <!-- <small id="descHelp" class="form-text text-muted">Description</small> -->
                       </div>
                       <div class="form-group">
-                          <label>Author</label>
-                          <input type="text" class="form-control" name="author" aria-describedby="authorHelp" placeholder="Doge">
-                          <!-- <small id="authorHelp" class="form-text text-muted">Author</small> -->
+                          <label>Presenter</label>
+                          <input type="text" class="form-control" name="presenter" aria-describedby="presenterHelp" placeholder="Doge">
                       </div>
                   </form>
                 </div>
