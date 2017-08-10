@@ -177,7 +177,7 @@ function result(){
       if(window.voting==="closed"){
         output = "Winner is: "
       }
-      output += "<b>" + data.val().presenter + "</b> for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+      output += <b> + data.val().presenter + </b> for + data.val().voteTitle+ " with " + data.val().count + " votes";
       $("#result-body").text(output);
     });
   });
