@@ -172,11 +172,7 @@ function result(){
 
   voteRef.orderByChild("count").limitToLast(1).on("value", function(data) {
     data.forEach(function(data) {
-      var output = "Leading the board is: ";
-      if(window.voting==="closed"){
-        output = "Winner is: "
-      }
-      output += "<b>" + data.val().author + "</b> for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+      var output = "Winner is: " + data.val().author + " for " + data.val().voteTitle+ " with " + data.val().count + " votes";
       $("#result-body").text(output);
     });
   });
