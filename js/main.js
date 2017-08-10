@@ -71,9 +71,9 @@ $(document).on("ready", function(){
 
 /* count debug
 function getCount(key){
-  db.ref("/votes/" + key).once('value').then(function(result){
-    $("#h4"+key).text(" - vote: " + result.val().count);
-  });
+db.ref("/votes/" + key).once('value').then(function(result){
+$("#h4"+key).text(" - vote: " + result.val().count);
+});
 }
 */
 
@@ -173,8 +173,11 @@ function result(){
 
   voteRef.orderByChild("count").limitToLast(1).on("value", function(data) {
     data.forEach(function(data) {
-      var output = "Winner is: " + data.val().author + " for " + data.val().voteTitle+ " with " + data.val().count + " votes";
-      $("#result-body").text(output);
+      var output = "Leading the board is: ";
+      if(window.voting==="closed"){
+        output = "Winner is: "
+      }
+      output.append(data.val().author + "</b> for " + data.val().voteTitle+ " with " + data.val().count + " votes");
     });
   });
   $("#resultModal").modal("show");
