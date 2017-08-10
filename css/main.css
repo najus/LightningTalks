@@ -9,11 +9,8 @@
     color: white !important;
 }
 
-
-
-
-
-
-
-
-
+.rcorners {
+    border-radius: 25px;
+    background: rgba(242, 222, 222, 0.64);
+    padding: 20px;
+}

@@ -49,7 +49,7 @@ $(document).on("ready", function(){
   firebase.database().ref('/votes/').once('value').then(function(snapshot) {
     var talks = snapshot.val();
     for (var key in talks) {
-      var topCard = $("<div></div>", {"class":"card", "style":"border: 1px solid; margin:15px; border-color: #080808;"});
+      var topCard = $("<div></div>", {"class":"card rcorners", "style":"margin:15px;"});
       var blockCard = $("<div></div>", {"class":"card-block", "style":"padding: 19px;"});
       var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
       var pTemp = $("<p></p>", {"id":"h4"+key});
