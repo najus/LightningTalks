@@ -53,7 +53,7 @@ $(document).on("ready", function(){
       var blockCard = $("<div></div>", {"class":"card-block", "style":"padding: 19px;"});
       var h4Card = $("<h4></h4>", {"class":"card-title"}).text(talks[key].voteTitle);
       var pTemp = $("<p></p>", {"id":"h4"+key});
-      var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].author);
+      var h5Card = $("<h5></h5>", {"class":"card-subtitle mb-2 text-muted"}).text(talks[key].presenter);
       var pCard = $("<p></p>", {"class":"card-text"}).text(talks[key].desc);
       var cardBtn = $("<a></a>", {"id": key, "class": "btn btn-primary", "onClick":"vote(\""+key+"\")"}).text("Vote");
 
@@ -64,17 +64,18 @@ $(document).on("ready", function(){
         disableVotingButton(key);
       }
       isAlreadyVoted(key);
-      getCount(key);
     }
   });
 
 });
 
+/* count debug
 function getCount(key){
   db.ref("/votes/" + key).once('value').then(function(result){
     $("#h4"+key).text(" - vote: " + result.val().count);
   });
 }
+*/
 
 function getLoggedInUser(){
   if(auth.currentUser){
@@ -230,7 +231,6 @@ function vote(key) {
 
   incrementVoteCount(key);
   addVotedUser(key, auth.currentUser.uid);
-  getCount(key);
 }
 
 function unvote(key){
@@ -249,7 +249,6 @@ function unvote(key){
 
   decrementVoteCount(key);
   removeVotedUser(key, auth.currentUser.uid);
-  getCount(key);
 }
 
 function incrementVoteCount(key){
