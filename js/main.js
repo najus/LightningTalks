@@ -177,7 +177,8 @@ function result(){
       if(window.voting==="closed"){
         output = "Winner is: "
       }
-      output += "<b>" + data.val().author + "</b> for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+      output += "<b>" + data.val().presenter + "</b> for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+      $("#result-body").text(output);
     });
   });
   $("#resultModal").modal("show");
@@ -185,7 +186,7 @@ function result(){
 
 function addVote() {
   var voteObject = $("#frmVoteAdd").serializeObject();
-  voteObject["date"] = firebase.database.ServerValue.TIMESTAMP;
+  voteObject["date"] = firebase.dgatabase.ServerValue.TIMESTAMP;
   voteObject["user"] = auth.currentUser.uid;
   /* voteObject["count"] = {
   "count": 0,
