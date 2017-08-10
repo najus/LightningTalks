@@ -180,7 +180,7 @@ function result(){
 }
 
 function addVote() {
-  var voteObject = $("#frmVoteAdd").serializeObject();
+  var voteObject = $("#frmVoteAdd").serializeArray();
   voteObject["date"] = firebase.database.ServerValue.TIMESTAMP;
   voteObject["user"] = auth.currentUser.uid;
   /* voteObject["count"] = {
