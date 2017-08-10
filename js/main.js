@@ -177,8 +177,13 @@ function result(){
       if(window.voting==="closed"){
         output = "Winner is: "
       }
-      output += <b> + data.val().presenter + </b> for + data.val().voteTitle+ " with " + data.val().count + " votes";
-      $("#result-body").text(output);
+      output += data.val().presenter.bold() + " for " + data.val().voteTitle.bold();
+      $("#result-body").html(output);
+      db.ref("prizes").once('value', function(snapshot){
+        var snap = snapshot.val();
+        $("#result-footer").text("Prize: " + snap.first);
+      });
+
     });
   });
   $("#resultModal").modal("show");
