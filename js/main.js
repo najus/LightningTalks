@@ -172,7 +172,11 @@ function result(){
 
   voteRef.orderByChild("count").limitToLast(1).on("value", function(data) {
     data.forEach(function(data) {
-      var output = "Winner is: " + data.val().author + " for " + data.val().voteTitle+ " with " + data.val().count + " votes";
+      var output = "Leading the board is: ";
+      if(window.voting==="closed"){
+        output = "Winner is: "
+      }
+      output += "<b>" + data.val().author + "</b> for " + data.val().voteTitle+ " with " + data.val().count + " votes";
       $("#result-body").text(output);
     });
   });
@@ -180,7 +184,7 @@ function result(){
 }
 
 function addVote() {
-  var voteObject = $("#frmVoteAdd").serializeArray();
+  var voteObject = $("#frmVoteAdd").serializeObject();
   voteObject["date"] = firebase.database.ServerValue.TIMESTAMP;
   voteObject["user"] = auth.currentUser.uid;
   /* voteObject["count"] = {
