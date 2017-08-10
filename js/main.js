@@ -31,7 +31,7 @@ $(document).on("ready", function(){
       var playersRef = firebase.database().ref("votes/");
       playersRef.orderByKey().on("child_added", function(talkData) {
         if(talkData.key == data.val().talk){
-          $("#votedFor").text("You voted for: "+ talkData.val().author);
+          $("#votedFor").text("You voted for: "+ talkData.val().presenter);
           var para = $("<p></p>");
           var unvoteBtn = $("<a></a>", {"id": "unvote-"+talkData.key, "class": "btn btn-primary btn-danger", "onClick":"unvote(\""+talkData.key+"\")"}).text("Unvote");
           $("#votedFor").append(para, unvoteBtn);
