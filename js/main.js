@@ -178,6 +178,9 @@ function result(){
         output = "Winner is: "
       }
       output += data.val().presenter.bold() + " for " + data.val().voteTitle.bold();
+      if(data.val().count == 0){
+        output = "No votes were cast";
+      }
       $("#result-body").html(output);
       db.ref("prizes").once('value', function(snapshot){
         var snap = snapshot.val();
